@@ -1,0 +1,29 @@
+    @Override
+    public void unsubscribe(Long id) {
+
+        AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+
+        CulturalHeritage ch = culturalHeritageRepository.findById(id).orElse(null);
+
+        if (null == ch)
+            throw new EntityNotFoundException();
+
+        user.getCulturalHeritages().remove(ch);
+        boolean removed = false;
+
+        // check if CH is truly removed
+        for (CulturalHeritage ie : user.getCulturalHeritages()) {
+            if (ie.getId() == id) {
+                user.getCulturalHeritages().remove(ie);
+                removed = true;
+                break;
+            }
+        }
+
+        if (removed == false) {
+            throw new EntityNotFoundException();
+        }
+
+        authenticatedUserService.update(user);
+    }

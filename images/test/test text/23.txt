@@ -1,0 +1,15 @@
+    @Override
+    public void subscribe(Long id) {
+
+        AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+
+        CulturalHeritage ch = culturalHeritageRepository.findById(id).orElse(null);
+
+        if (null == ch)
+            throw new EntityNotFoundException();
+
+        user.getCulturalHeritages().add(ch);
+
+        authenticatedUserService.update(user);
+    }
