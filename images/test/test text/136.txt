@@ -1,0 +1,18 @@
+    //controller method to show the initial HTML form
+    @RequestMapping("/showForm")
+    public String showForm(){
+      return "form";
+    }
+  
+    //controller method to process the HTML form
+    @RequestMapping("/processForm")
+    public String processForm(HttpServletRequest request, Model model) {
+      String name = request.getParameter("name");
+      String surname = request.getParameter("surname");
+      
+      model.addAttribute("studentName", name);
+      model.addAttribute("studentSurname", surname);
+  
+      return "hello";
+    }
+}

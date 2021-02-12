@@ -1,0 +1,19 @@
+    def move(self, angle):
+        self._setup()
+        self.setAngle(angle)
+        GPIO.cleanup()
+
+    def _reset_position(self):
+        self._setup()
+        self.setAngle(0)
+        GPIO.cleanup()
+    
+    def __del__(self):
+        self._reset_position()
+        
+        # Hack to stop cleanup from turning off the internal pull ups
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(self.pin1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(self.pin2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(self.pin3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(self.pin4, GPIO.IN, pull_up_down=GPIO.PUD_UP)

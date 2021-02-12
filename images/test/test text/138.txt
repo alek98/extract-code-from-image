@@ -1,0 +1,60 @@
+def vectorise(
+    image_filename, resolution=1024,
+    draw_contours=False, repeat_contours=1,
+    draw_hatch=False, repeat_hatch=1,
+    ):
+
+    image = None
+    possible = [
+        image_filename,
+        image_filename+".jpg",
+        image_filename+".png",
+    ]
+
+    for p in possible:
+        try:
+            image = Image.open(p)
+            break
+        except:
+            pass
+    w,h = image.size
+
+    # convert the image to greyscale
+    image = image.convert("L")
+
+    # maximise contrast
+    image=ImageOps.autocontrast(image, 10)
+
+    lines = []
+
+    if draw_contours and repeat_contours:
+        contours = sortlines(getcontours(
+            image.resize((int(resolution/draw_contours), int(resolution/draw_contours*h/w))),
+            draw_contours
+        ))
+        for r in range(repeat_contours):
+            lines += contours
+
+    if draw_hatch and repeat_hatch:
+        hatches = sortlines(
+            hatch(
+                # image,
+                image.resize((int(resolution/draw_hatch), int(resolution/draw_hatch*h/w))),
+                draw_hatch
+        ))
+        for r in range(repeat_hatch):
+            lines += hatches
+
+# my change. original is :   f = open(svg_folder + image_filename + ".svg", 'w')
+    f = open( image_filename + ".svg", 'w')
+    f.write(makesvg(lines))
+    f.close()
+    segments = 0
+    for line in lines:
+        segments = segments + len(line)
+    print(len(lines), "strokes,", segments, "points.")
+    print("done.")
+    return lines
+
+
+# -------------- vectorisation options --------------

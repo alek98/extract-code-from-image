@@ -1,0 +1,43 @@
+    @RequestMapping(value= "/by-page",method = RequestMethod.GET)
+    public ResponseEntity<List<CulturalContentCategoryDTO>> getAllCulturalContentCategories(Pageable pageable) {
+        Page<CulturalContentCategory> page = culturalContentCategoryService.findAll(pageable);
+        List<CulturalContentCategoryDTO> culturalContentCategoryDTOS = toCulturalContentCategoryDTOList(page.toList());
+        //Page<CulturalContentCategoryDTO> pageCulturalContentCategoryDTOS = new PageImpl<>(culturalContentCategoryDTOS,page.getPageable(),page.getTotalElements());
+
+        return new ResponseEntity<>(culturalContentCategoryDTOS, HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/{id}", method=RequestMethod.GET)
+    public ResponseEntity<CulturalContentCategoryDTO> getCulturalContentCategory(@PathVariable Long id){
+        CulturalContentCategory culturalContentCategory = culturalContentCategoryService.findOne(id);
+        if(culturalContentCategory == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(culturalContentCategoryMapper.toDto(culturalContentCategory), HttpStatus.OK);
+    }
+
+    @RequestMapping(method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CulturalContentCategoryDTO> createCulturalContentCategory(@Valid @RequestBody CulturalContentCategoryDTO culturalContentCategoryDTO){
+        CulturalContentCategory culturalContentCategory;
+        try {
+            culturalContentCategory = culturalContentCategoryService.create(culturalContentCategoryMapper.toEntity(culturalContentCategoryDTO));
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(culturalContentCategoryMapper.toDto(culturalContentCategory), HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value="/{id}", method=RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CulturalContentCategoryDTO> updateCulturalContentCategory(
+            @RequestBody CulturalContentCategoryDTO culturalContentCategoryDTO, @PathVariable Long id){
+        CulturalContentCategory culturalContentCategory;
+        try {
+            culturalContentCategory = culturalContentCategoryService.update(culturalContentCategoryMapper.toEntity(culturalContentCategoryDTO), id);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(culturalContentCategoryMapper.toDto(culturalContentCategory), HttpStatus.OK);
+    }
