@@ -1,0 +1,26 @@
+    @Override
+    public CulturalHeritage update(CulturalHeritage culturalHeritage, MultipartFile file) {
+
+        CulturalHeritage culturalHeritage2 = culturalHeritageRepository.findById(culturalHeritage.getId()).orElse(null);
+
+        if (null == culturalHeritage2)
+            throw new EntityNotFoundException();
+
+        FileDB fileDB = fileDBService.add(file);
+        culturalHeritage.setImages(fileDB);
+
+        culturalHeritage.setNews(culturalHeritage2.getNews());
+        culturalHeritage.setComments(culturalHeritage2.getComments());
+        culturalHeritage.setRatings(culturalHeritage2.getRatings());
+
+        return culturalHeritageRepository.save(culturalHeritage);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+
+        if (null == culturalHeritageRepository.findById(id).orElse(null))
+            throw new EntityNotFoundException();
+
+        culturalHeritageRepository.deleteById(id);
+    }

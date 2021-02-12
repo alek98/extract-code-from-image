@@ -1,0 +1,32 @@
+@RequestMapping("/api")
+public class EmployeeController {
+  
+  @Autowired
+  EmployeeService employeeService;
+
+  //get all employees
+  @GetMapping("/employees")
+  public List<Employee> findAll(){
+    return employeeService.findAll();
+  }
+
+  //get employee by id
+  @GetMapping("/employees/{employeeId}")
+  public Employee getEmployee (@PathVariable int employeeId){
+    return employeeService.findById(employeeId);
+  }
+  
+  //save employee
+  @PostMapping("/employees")
+  public Employee addEmployee(@RequestBody Employee employee){
+    //employee.setId(0);
+    employeeService.save(employee);
+    return employee;
+  }
+
+  //update employee by sending object
+  @PutMapping("/employees")
+  public Employee updateEmployee(@RequestBody Employee employee){
+    employeeService.save(employee);
+    return employee;
+  }

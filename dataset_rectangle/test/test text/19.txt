@@ -1,0 +1,33 @@
+@Service
+public class CulturalHeritageServiceImpl implements CulturalHeritageService {
+
+    @Autowired
+    private CulturalHeritageRepository culturalHeritageRepository;
+
+    @Autowired
+    private FileDBService fileDBService;
+
+    @Autowired
+    private AuthenticatedUserService authenticatedUserService;
+
+    @Override
+    public List<CulturalHeritage> findAll() {
+        return culturalHeritageRepository.findAll();
+    }
+
+    public Page<CulturalHeritage> findAll(Pageable pageable) {
+        return culturalHeritageRepository.findAll(pageable);
+    }
+
+    @Override
+    public CulturalHeritage findById(Long id) {
+        return culturalHeritageRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public CulturalHeritage add(CulturalHeritage culturalHeritage, MultipartFile file) {
+
+        try {
+            FileDB fileDB;
+            fileDB = fileDBService.add(file);
+            culturalHeritage.setImages(fileDB);

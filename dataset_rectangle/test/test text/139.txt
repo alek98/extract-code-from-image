@@ -1,0 +1,30 @@
+        self._left_down_corner = left_down_corner
+        self._right_down_corner = right_down_corner
+        self._left_up_corner = left_up_corner
+        self._right_up_corner = right_up_corner
+
+    #setters
+    def set_left_down_corner(self, x, y):
+        self._left_down_corner = (x,y)
+
+    def set_right_down_corner(self, x, y):
+        self._right_down_corner = (x,y)
+
+    def set_left_up_corner(self, x, y):
+        self._left_up_corner = (x,y)
+
+    def set__right_up_corner(self, x, y):
+        self._right_up_corner = (x,y)
+
+    #getters
+    def get_left_down_corner(self):
+        return self._left_down_corner
+
+    def get_right_down_corner(self):
+        return self._right_down_corner
+
+    def get_left_up_corner(self):
+        return self._left_up_corner
+
+    def get_right_up_corner(self):
+        return self._right_up_corner

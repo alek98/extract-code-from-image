@@ -1,0 +1,28 @@
+        GPIO.setup(self.pin4, GPIO.OUT)
+    def forward_step(self):
+        if self._substep_forwards == 0:
+            self.set_stepper(1,0,1,0)
+            self._substep_forwards += 1
+        elif self._substep_forwards == 1:
+            self.set_stepper(0,1,1,0)
+            self._substep_forwards += 1
+        elif self._substep_forwards == 2:
+            self.set_stepper(0,1,0,1)
+            self._substep_forwards += 1
+        else:
+            self.set_stepper(1,0,0,1)
+            self._substep_forwards = 0
+        
+    def backward_step(self):
+        if self._substep_backwards == 0:
+            self.set_stepper(1,0,0,1)
+            self._substep_backwards += 1
+        elif self._substep_backwards == 1:
+            self.set_stepper(0,1,0,1)
+            self._substep_backwards += 1
+        elif self._substep_backwards == 2:
+            self.set_stepper(0,1,1,0)
+            self._substep_backwards += 1
+        else:
+            self.set_stepper(1,0,1,0)
+            self._substep_backwards = 0
